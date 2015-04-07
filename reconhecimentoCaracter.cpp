@@ -190,8 +190,18 @@ int main()
 	
 			pintado.push_back(novo);
 		 	al_draw_filled_ellipse(evento.mouse.x, evento.mouse.y, 5, 5, al_map_rgb(0,0,0));
+		 
+		 	imagemBinaria nova;
+		 	for (int i=0; i<N; i++)
+		 		for (int j =0; j<M; j++)
+		 			nova.matriz[i][j] = atual.matriz[i][j];
+		 	gera_binario(pintado, Direita, Esquerda, Baixo, Cima, &nova, false);
+				//reinicia = true;
+			int resp;
+			resp = responde(nova, thetaZero);
+			printf("%d\n",resp);	
 		}
-		
+					
 
 
 		al_flip_display();
