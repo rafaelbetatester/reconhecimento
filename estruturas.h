@@ -3,6 +3,13 @@
 
 #include "constantes.h"
 
+struct resposta
+{
+	int response;
+	double probabilidade;
+
+};
+
 struct imagemBinaria
 {
 	int matriz[N][M];

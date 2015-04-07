@@ -5,6 +5,6 @@
 
 void treinamento(pesos *Thetazero);
 
-int responde(imagemBinaria atual, pesos thetaZero);
+resposta responde(imagemBinaria atual, pesos thetaZero);
 
 #endif

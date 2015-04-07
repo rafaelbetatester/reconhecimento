@@ -13,7 +13,7 @@ double sigmoid(double x)
     return 1.0 / (1.0 + pow(e, -x));
 }
 
-int responde(imagemBinaria atual, pesos thetaZero)
+resposta responde(imagemBinaria atual, pesos thetaZero)
 {
 
 	double z_i = 0;
@@ -31,10 +31,23 @@ int responde(imagemBinaria atual, pesos thetaZero)
 	}
 
 	z_i = sigmoid(z_i);
-	printf("Z:%.4lf\n\n",100*(1 - z_i));
-	if (z_i >= 0.5) return 0;
-	return 1;	
+	//printf("Z:%.4lf\n\n",100*(1 - z_i));
 
+	resposta SOLUCAO;
+
+	if (z_i >= 0.5)
+	{
+		SOLUCAO.response = 0;
+		SOLUCAO.probabilidade = 100*z_i;
+	}
+
+	else
+	{
+		SOLUCAO.response = 1;
+		SOLUCAO.probabilidade = 100*(1 - z_i);
+	} 
+	
+	return SOLUCAO;
 }
 
 vector <int> X[num_exemplos_Zero];

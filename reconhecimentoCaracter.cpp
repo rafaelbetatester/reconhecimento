@@ -7,6 +7,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #include "estruturas.h"
 #include "constantes.h"
@@ -39,6 +41,7 @@ int main()
 
 	ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 	ALLEGRO_DISPLAY *display = NULL;
+	ALLEGRO_FONT *fonte = NULL;
 
 	//_____________________________________________
 
@@ -47,6 +50,24 @@ int main()
 	if (!al_init())
 	{
 		al_show_native_message_box(NULL, "AVISO!", "ERRO!", "ERRO AO INICIALIZAR A ALLEGRO!", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+		return -1;
+	}
+
+	al_init_font_addon();
+
+	if (!al_init_ttf_addon())
+	{
+		fprintf(stderr, "Falha ao inicializar add-on allegro_ttf.\n");
+		return -1;
+	}
+
+	
+	
+	fonte = al_load_font("OpenSans-Regular.ttf", 15, 0);
+	if (!fonte)
+	{
+		al_destroy_display(display);
+		fprintf(stderr, "Falha ao carregar fonte.\n");
 		return -1;
 	}
 
@@ -117,8 +138,10 @@ int main()
 						gera_binario(pintado, Direita, Esquerda, Baixo, Cima, &atual, false);
 						reinicia = true;
 						int resp;
-						resp = responde(atual, thetaZero);
-						printf("%d\n",resp);
+						resposta SOLUCAO;
+						SOLUCAO = responde(atual, thetaZero);
+						resp = SOLUCAO.response;
+						// printf("%d\n",resp);
 					break;
 
 
@@ -202,10 +225,20 @@ int main()
 			gera_binario(pintado, Direita, Esquerda, Baixo, Cima, &nova, false);
 			//reinicia = true;
 			int resp;
-			resp = responde(nova, thetaZero);
-			printf("%d\n",resp);	
-		}
+			double prob;
+			resposta SOLUCAO;
+			SOLUCAO = responde(nova, thetaZero);
 
+			resp = SOLUCAO.response;
+			prob = SOLUCAO.probabilidade;
+			//printf("%d\n",resp);	
+
+			al_draw_filled_rectangle(largura_tela/2 - largura_tela/fracao_retangulo1, 0, largura_tela/2 + largura_tela/fracao_retangulo1, altura_tela, al_map_rgb(0, 0, 0));
+			al_draw_filled_rectangle(0, altura_tela - altura_tela/fracao_retangulo2 , largura_tela, altura_tela, al_map_rgb(0, 0, 0));
+    		al_draw_textf(fonte, al_map_rgb(255, 0, 0),0, 250, ALLEGRO_ALIGN_LEFT, "Estimado: %d", resp);
+    		al_draw_textf(fonte, al_map_rgb(255, 0, 0), largura_tela/2 + largura_tela/fracao_retangulo1, 250, ALLEGRO_ALIGN_LEFT, "Probabilidade: %.2lf", prob);
+
+		}
 
 		al_flip_display();
 
@@ -222,7 +255,7 @@ int main()
 			Cima = INF;
 			Baixo = 0;
 
-		}
+		}	
 
 		frame++;
 		if (al_get_time() - timer > 1.0)
